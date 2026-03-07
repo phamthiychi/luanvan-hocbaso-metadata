@@ -19,5 +19,5 @@ uvicorn src.adapter.api.main:app --reload
 # Test with postman
 - Dowload postman at: `https://www.postman.com/downloads/` and sign in with Google account.
 - Go to `Workspace > My workspace > Collections`
-- Import file from `\script\postman\hocbaso.postman_collection` in repo project.
+- Import file from `\common\postman\hocbaso.postman_collection` in repo project.
 - Have fun !!!!
