@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, Request
 
-from src.model.teacher import Teacher
 from src.adapter.api.template.teacher import TeacherCreate, TeacherUpdate
 
 router = APIRouter(prefix="/teachers", tags=["teachers"])
@@ -8,11 +7,7 @@ router = APIRouter(prefix="/teachers", tags=["teachers"])
 @router.get("")
 async def get_teachers(req: Request):
     repo = req.app.state.teacher_repo
-    teachers = []
-    for doc in repo.col.find():
-        doc["_id"] = str(doc["_id"])
-        teachers.append(doc)
-    return teachers
+    return await repo.get_all()
 
 @router.get("/{code}")
 async def get_teacher(code: str, req: Request):
@@ -27,18 +22,9 @@ async def get_teacher(code: str, req: Request):
 @router.post("")
 async def create_teacher(payload: TeacherCreate, req: Request):
     repo = req.app.state.teacher_repo
-    teacher = Teacher(
-        code=payload.code,
-        name=payload.name,
-        date_of_birth=payload.date_of_birth,
-        gender=payload.gender,
-        status=payload.status,
-        phone=payload.phone,
-        nationality=payload.nationality,
-        specialization=payload.specialization,
-        position=payload.position,
-    )
-    saved = await repo.add(teacher)
+    saved = await repo.add(payload.dict())
+    if saved is None:
+        raise HTTPException(status_code=409, detail="Already exists")
     return saved.to_dict()
 
 @router.put("")

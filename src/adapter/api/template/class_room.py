@@ -1,15 +1,15 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class SchoolClassCreate(BaseModel):
+class ClassRoomCreate(BaseModel):
     code: str
     name: str
     size: int
-    grade_level_id: str
-    academic_year_id: str
+    grade_level_id: Optional[str] = None
+    academic_year_id: Optional[str] = None
     special_program: Optional[str] = None
 
-class SchoolClassUpdate(BaseModel):
+class ClassRoomUpdate(BaseModel):
     code: str
     name: Optional[str] = None
     size: Optional[int] = None

@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, Request
 
-from src.model.score import Score
 from src.adapter.api.template.score import ScoreCreate, ScoreUpdate
 
 router = APIRouter(prefix="/scores", tags=["scores"])
@@ -8,11 +7,7 @@ router = APIRouter(prefix="/scores", tags=["scores"])
 @router.get("")
 async def get_scores(req: Request):
     repo = req.app.state.score_repo
-    scores = []
-    for doc in repo.col.find():
-        doc["_id"] = str(doc["_id"])
-        scores.append(doc)
-    return scores
+    return await repo.get_all()
 
 @router.get("/{code}")
 async def get_score(code: str, req: Request):
@@ -25,12 +20,9 @@ async def get_score(code: str, req: Request):
 @router.post("")
 async def create_score(payload: ScoreCreate, req: Request):
     repo = req.app.state.score_repo
-    score = Score(
-        code=payload.code,
-        name=payload.name,
-        description=payload.description,
-    )
-    saved = await repo.add(score)
+    saved = await repo.add(payload.dict())
+    if saved is None:
+        raise HTTPException(status_code=409, detail="Already exists")
     return saved.to_dict()
 
 @router.put("")

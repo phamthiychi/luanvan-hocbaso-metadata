@@ -1,4 +1,5 @@
 from typing import Optional
+from datetime import datetime, date
 
 class AcademicYear:
     def __init__(
@@ -55,6 +56,15 @@ class AcademicYearData:
             raise ValueError("academic year's start date cannot be empty")
         if not self.end_date:
             raise ValueError("academic year's end date cannot be empty")
+        try:
+            if not isinstance(self.start_date, date):
+                start = datetime.strptime(self.start_date, "%Y-%m-%d")
+            if not isinstance(self.end_date, date):
+                end = datetime.strptime(self.end_date, "%Y-%m-%d")
+        except ValueError:
+            raise ValueError("academic year's date must be in format YYYY-MM-DD")
+        if start > end:
+            raise ValueError("academic year's start date must be before end date")
 
     def to_dict(self) -> dict:
         return {

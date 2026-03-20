@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, Request
 
-from src.model.student import Student
 from src.adapter.api.template.student import StudentCreate, StudentUpdate
 
 router = APIRouter(prefix="/students", tags=["students"])
@@ -8,11 +7,7 @@ router = APIRouter(prefix="/students", tags=["students"])
 @router.get("")
 async def get_students(req: Request):
     repo = req.app.state.student_repo
-    students = []
-    for doc in repo.col.find():
-        doc["_id"] = str(doc["_id"])
-        students.append(doc)
-    return students
+    return await repo.get_all()
 
 @router.get("/{code}")
 async def get_student(code: str, req: Request):
@@ -27,20 +22,9 @@ async def get_student(code: str, req: Request):
 @router.post("")
 async def create_student(payload: StudentCreate, req: Request):
     repo = req.app.state.student_repo
-    student = Student(
-        code=payload.code,
-        name=payload.name,
-        date_of_birth=payload.date_of_birth,
-        gender=payload.gender,
-        nationality=payload.nationality,
-        card_id=payload.card_id,
-        edu_id=payload.edu_id,
-        status=payload.status,
-        phone=payload.phone,
-        address=payload.address,
-        other_info=payload.other_info
-    )
-    saved = await repo.add(student)
+    saved = await repo.add(payload.dict())
+    if saved is None:
+        raise HTTPException(status_code=409, detail="Already exists")
     return saved.to_dict()
 
 @router.put("")

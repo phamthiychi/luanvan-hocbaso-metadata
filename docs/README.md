@@ -12,9 +12,11 @@
 - Install the packages with `python -m pip install -r requirements.txt`
 
 # Run
-uvicorn src.adapter.api.main:app --reload
+- uvicorn src.adapter.api.main_mongo:app --host 0.0.0.0 --port 8000 --reload
+- uvicorn src.adapter.api.main_postgres:app --host 0.0.0.0 --port 8001 --reload
 
-- http://127.0.0.1:8000/docs
+- `http://127.0.0.1:8000/docs` host for Mongo
+- `http://127.0.0.1:8001/docs` host for Postgres
 
 # Test with postman
 - Dowload postman at: `https://www.postman.com/downloads/` and sign in with Google account.

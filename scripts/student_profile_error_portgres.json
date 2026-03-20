@@ -1,0 +1,28 @@
+[
+    {
+        "name": "Trương Phúc An",
+        "date_of_birth": "2018-04-19",
+        "gender": "Nam",
+        "ethnicity": "Hoa",
+        "nationality": "Việt Nam",
+        "card_id": "79218027222",
+        "edu_id": "7968254704",
+        "status": "Đang học",
+        "phone": "0906838066",
+        "address": "415/37 Lầu 2, Trần Phú, Khu phố 3, Phường 07, Quận 5, Thành phố Hồ Chí Minh",
+        "class_room": "Một 1"
+    },
+    {
+        "name": "Nguyễn Quỳnh Anh",
+        "date_of_birth": "2018-08-15",
+        "gender": "Nữ",
+        "ethnicity": "Kinh",
+        "nationality": "Việt Nam",
+        "card_id": "79318026268",
+        "edu_id": "7966815015",
+        "status": "Đang học",
+        "phone": "0774432290",
+        "address": "9, Bùi Hữu Nghĩa, Khu phố 3, Phường 05, Quận 5, Thành phố Hồ Chí Minh",
+        "class_room": "Một 1"
+    }
+]

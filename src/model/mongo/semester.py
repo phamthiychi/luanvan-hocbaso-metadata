@@ -1,4 +1,5 @@
 from typing import Optional
+from datetime import datetime, date
 
 class Semester:
     def __init__(
@@ -60,6 +61,15 @@ class SemesterData:
             raise ValueError("semester's start date cannot be empty")
         if not self.end_date:
             raise ValueError("semester's end date cannot be empty")
+        try:
+            if not isinstance(self.start_date, date):
+                start = datetime.strptime(self.start_date, "%Y-%m-%d")
+            if not isinstance(self.end_date, date):
+                end = datetime.strptime(self.end_date, "%Y-%m-%d")
+        except ValueError:
+            raise ValueError("semester's date must be in format YYYY-MM-DD")
+        if start > end:
+            raise ValueError("semester's start date must be before end date")
         if not self.academic_year_id:
             raise ValueError("semester's academic year id cannot be empty")
 

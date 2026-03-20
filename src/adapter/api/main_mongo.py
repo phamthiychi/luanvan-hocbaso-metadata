@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
 from src.adapter.database.mongo_manager import mongo_manager
 from src.adapter.database.mongo_repository import (
@@ -17,11 +18,11 @@ from src.adapter.api.routers.teacher import router as teacher_router
 from src.adapter.api.routers.subject import router as subject_router
 from src.adapter.api.routers.semester import router as semester_router
 from src.adapter.api.routers.score import router as score_router
-from src.adapter.api.routers.school_class import router as school_class_router
+from src.adapter.api.routers.class_room import router as class_room_router
 from src.adapter.api.routers.grade_level import router as grade_level_router
 from src.adapter.api.routers.academic_year import router as academic_year_router
 
-app = FastAPI(title="HOCBASO API")
+app = FastAPI(title="HOCBASO API - MONGO")
 
 @app.on_event("startup")
 async def startup():
@@ -31,7 +32,7 @@ async def startup():
     app.state.subject_repo = MongoSubjectRepository(db)
     app.state.semester_repo = MongoSemesterRepository(db)
     app.state.score_repo = MongoScoreRepository(db)
-    app.state.school_class_repo = MongoClassRepository(db)
+    app.state.class_room_repo = MongoClassRepository(db)
     app.state.grade_level_repo = MongoGradeLevelRepository(db)
     app.state.academic_year_repo = MongoAcademicYearRepository(db)
 
@@ -50,11 +51,21 @@ async def health():
             "error": e
         }
 
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={
+            "status": "500 error",
+            "error": str(exc)
+        }
+    )
+
 app.include_router(student_router)
 app.include_router(teacher_router)
 app.include_router(subject_router)
 app.include_router(semester_router)
 app.include_router(score_router)
-app.include_router(school_class_router)
+app.include_router(class_room_router)
 app.include_router(grade_level_router)
 app.include_router(academic_year_router)

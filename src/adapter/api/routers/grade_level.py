@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, Request
 
-from src.model.grade_level import GradeLevel
 from src.adapter.api.template.grade_level import GradeLevelCreate, GradeLevelUpdate
 
 router = APIRouter(prefix="/grade-levels", tags=["grade-levels"])
@@ -8,11 +7,7 @@ router = APIRouter(prefix="/grade-levels", tags=["grade-levels"])
 @router.get("")
 async def get_grade_levels(req: Request):
     repo = req.app.state.grade_level_repo
-    grade_levels = []
-    for doc in repo.col.find():
-        doc["_id"] = str(doc["_id"])
-        grade_levels.append(doc)
-    return grade_levels
+    return await repo.get_all()
 
 @router.get("/{code}")
 async def get_grade_level(code: str, req: Request):
@@ -25,12 +20,9 @@ async def get_grade_level(code: str, req: Request):
 @router.post("")
 async def create_grade_level(payload: GradeLevelCreate, req: Request):
     repo = req.app.state.grade_level_repo
-    grade_level = GradeLevel(
-        code=payload.code,
-        name=payload.name,
-        max_students=payload.max_students,
-    )
-    saved = await repo.add(grade_level)
+    saved = await repo.add(payload.dict())
+    if saved is None:
+        raise HTTPException(status_code=409, detail="Already exists")
     return saved.to_dict()
 
 @router.put("")

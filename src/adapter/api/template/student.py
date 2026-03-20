@@ -6,6 +6,7 @@ class StudentCreate(BaseModel):
     name: str
     date_of_birth: str
     gender: str
+    ethnicity: str
     nationality: str
     card_id: Optional[str] = None
     edu_id: Optional[str] = None
@@ -18,6 +19,7 @@ class StudentUpdate(BaseModel):
     code: str
     nationality: Optional[str] = None
     card_id: Optional[str] = None
+    edu_id: Optional[str] = None
     status: Optional[str] = None
     phone: Optional[str] = None
     address: Optional[str] = None

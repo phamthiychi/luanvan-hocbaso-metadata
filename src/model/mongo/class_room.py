@@ -1,6 +1,6 @@
 from typing import Optional
 
-class SchoolClass:
+class ClassRoom:
     def __init__(
         self,
         code: str,
@@ -11,7 +11,7 @@ class SchoolClass:
         special_program: Optional[str] = None
     ):
         self.code = code
-        self.data = SchoolClassData(
+        self.data = ClassRoomData(
             name=name,
             size=size,
             grade_level_id=grade_level_id,
@@ -32,7 +32,7 @@ class SchoolClass:
 
     @classmethod
     def from_dict(cls, data: dict):
-        class_data = SchoolClassData.from_dict(data.get("data"))
+        class_data = ClassRoomData.from_dict(data.get("data"))
         return cls(
             code=data.get("code"),
             name=class_data.name,
@@ -42,7 +42,7 @@ class SchoolClass:
             special_program=class_data.special_program
         )
 
-class SchoolClassData:
+class ClassRoomData:
     def __init__(
         self,
         name: str,
@@ -60,13 +60,15 @@ class SchoolClassData:
 
     def _validate(self):
         if not self.name:
-            raise ValueError("class name cannot be empty")
+            raise ValueError("class's name cannot be empty")
         if self.size is None:
-            raise ValueError("class size cannot be empty")
+            raise ValueError("class's size cannot be empty")
+        if self.size <= 0:
+            raise ValueError("class's size must be greater than 0")
         if not self.grade_level_id:
-            raise ValueError("grade_level_id cannot be empty")
+            raise ValueError("class's grade level id cannot be empty")
         if not self.academic_year_id:
-            raise ValueError("academic_year_id cannot be empty")
+            raise ValueError("class's academic year id cannot be empty")
 
     def to_dict(self) -> dict:
         return {

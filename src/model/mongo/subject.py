@@ -48,6 +48,8 @@ class SubjectData:
             raise ValueError("subject's name cannot be empty")
         if self.total_periods is None:
             raise ValueError("subject's total periods cannot be empty")
+        if self.total_periods <= 0:
+            raise ValueError("subject's total periods be greater than 0")
 
     def to_dict(self) -> dict:
         return {

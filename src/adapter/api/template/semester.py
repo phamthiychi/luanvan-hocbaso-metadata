@@ -7,7 +7,7 @@ class SemesterCreate(BaseModel):
     name: str
     start_date: str
     end_date: str
-    academic_year_id: str
+    academic_year_id: Optional[str] = None
 
 class SemesterUpdate(BaseModel):
     code: str

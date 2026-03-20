@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, Request
 
-from src.model.subject import Subject
 from src.adapter.api.template.subject import SubjectCreate, SubjectUpdate
 
 router = APIRouter(prefix="/subjects", tags=["subjects"])
@@ -8,11 +7,7 @@ router = APIRouter(prefix="/subjects", tags=["subjects"])
 @router.get("")
 async def get_subjects(req: Request):
     repo = req.app.state.subject_repo
-    subjects = []
-    for doc in repo.col.find():
-        doc["_id"] = str(doc["_id"])
-        subjects.append(doc)
-    return subjects
+    return await repo.get_all()
 
 @router.get("/{code}")
 async def get_subject(code: str, req: Request):
@@ -27,13 +22,9 @@ async def get_subject(code: str, req: Request):
 @router.post("")
 async def create_subject(payload: SubjectCreate, req: Request):
     repo = req.app.state.subject_repo
-
-    subject = Subject(
-        code=payload.code,
-        name=payload.name,
-        total_periods=payload.total_periods,
-    )
-    saved = await repo.add(subject)
+    saved = await repo.add(payload.dict())
+    if saved is None:
+        raise HTTPException(status_code=409, detail="Already exists")
     return saved.to_dict()
 
 @router.put("")

@@ -9,9 +9,13 @@ class MongoManager:
         self.admin = self.client.admin
 
     def get_core_db(self):
-        return self.client[settings.CORE_DB]
+        return self.client[settings.CORE_MONGO_DB]
 
     def get_db(self, db_name: str):
         return self.client[db_name]
+
+    def clean_core_db(self, collection_name):
+        db = self.get_core_db()
+        db[collection_name].delete_many({})
 
 mongo_manager = MongoManager()

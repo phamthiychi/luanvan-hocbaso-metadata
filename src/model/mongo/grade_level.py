@@ -47,7 +47,9 @@ class GradeLevelData:
         if not self.name:
             raise ValueError("grade level's name cannot be empty")
         if self.max_students is None:
-            raise ValueError("max_students cannot be empty")
+            raise ValueError("grade level's max students cannot be empty")
+        if self.max_students <= 0:
+            raise ValueError("grade level's max students must be greater than 0")
 
     def to_dict(self) -> dict:
         return {

@@ -1,96 +1,111 @@
-from typing import Optional, Any
+from typing import Optional
+from datetime import datetime, date
 
-class Student:
+class Teacher:
     def __init__(
         self,
         code: str,
         name: str,
         date_of_birth: str,
         gender: str,
+        ethnicity: str,
         nationality: str,
         card_id: Optional[str] = None,
         edu_id: Optional[str] = None,
         status: Optional[str] = None,
         phone: Optional[str] = None,
-        address: Optional[str] = None,
-        other_info: Optional[Any] = None
+        specialization: Optional[str] = None,
+        position: Optional[str] = None
     ):
         self.code = code
-        self.data = StudentData(
+        self.data = TeacherData(
             name=name,
             card_id=card_id,
             edu_id=edu_id,
             date_of_birth=date_of_birth,
             gender=gender,
-            status=status,
-            address=address,
+            ethnicity=ethnicity,
             nationality=nationality,
-            phone=phone
+            status=status,
+            phone=phone,
+            specialization=specialization,
+            position=position
         )
-        self.other_info = other_info
         self._validate()
 
     def _validate(self):
         if not self.code:
-            raise ValueError("student's code cannot be empty")
+            raise ValueError("teacher's code cannot be empty")
 
     def to_dict(self) -> dict:
         return {
             "code": self.code,
-            "data": self.data.to_dict(),
-            "other_info": self.other_info
+            "data": self.data.to_dict()
         }
 
     @classmethod
     def from_dict(cls, data: dict):
-        student_data = StudentData.from_dict(data.get("data"))
+        teacher_data = TeacherData.from_dict(data.get("data"))
         return cls(
             code=data.get("code"),
-            name=student_data.name,
-            date_of_birth=student_data.date_of_birth,
-            gender=student_data.gender,
-            nationality=student_data.nationality,
-            card_id=student_data.card_id,
-            edu_id=student_data.edu_id,
-            status=student_data.status,
-            phone=student_data.phone,
-            address=student_data.address,
-            other_info=data.get("other_info")
+            name=teacher_data.name,
+            card_id=teacher_data.card_id,
+            edu_id=teacher_data.edu_id,
+            date_of_birth=teacher_data.date_of_birth,
+            gender=teacher_data.gender,
+            ethnicity=teacher_data.ethnicity,
+            nationality=teacher_data.nationality,
+            status=teacher_data.status,
+            phone=teacher_data.phone,
+            specialization=teacher_data.specialization,
+            position=teacher_data.position
         )
 
-class StudentData:
+
+class TeacherData:
     def __init__(
         self,
         name: str,
         date_of_birth: str,
         gender: str,
+        ethnicity: str,
         nationality: str,
         card_id: Optional[str] = None,
         edu_id: Optional[str] = None,
         status: Optional[str] = None,
         phone: Optional[str] = None,
-        address: Optional[str] = None
+        specialization: Optional[str] = None,
+        position: Optional[str] = None
     ):
         self.name = name
         self.card_id = card_id
         self.edu_id = edu_id
         self.date_of_birth = date_of_birth
         self.gender = gender
+        self.ethnicity = ethnicity
         self.nationality = nationality
         self.status = status
         self.phone = phone
-        self.address = address
+        self.specialization = specialization
+        self.position = position
         self._validate()
 
     def _validate(self):
         if not self.name:
-            raise ValueError("student's name cannot be empty")
+            raise ValueError("teacher's name cannot be empty")
         if not self.date_of_birth:
-            raise ValueError("student's date of birth cannot be empty")
+            raise ValueError("teacher's date of birth cannot be empty")
+        try:
+            if not isinstance(self.date_of_birth, date):
+                datetime.strptime(self.date_of_birth, "%Y-%m-%d")
+        except ValueError:
+            raise ValueError("teacher's date of birth must be in format YYYY-MM-DD")
         if not self.gender:
-            raise ValueError("student's gender cannot be empty.")
+            raise ValueError("teacher's gender cannot be empty")
+        if not self.ethnicity:
+            raise ValueError("teacher's ethnicity cannot be empty")
         if not self.nationality:
-            raise ValueError("student's nationality cannot be empty.")
+            raise ValueError("teacher's nationality cannot be empty")
 
     def to_dict(self) -> dict:
         return {
@@ -99,10 +114,12 @@ class StudentData:
             "edu_id": self.edu_id,
             "date_of_birth": self.date_of_birth,
             "gender": self.gender,
-            "nationality": self.nationality,
+            "ethnicity": self.ethnicity,
             "status": self.status,
             "phone": self.phone,
-            "address": self.address
+            "nationality": self.nationality,
+            "specialization": self.specialization,
+            "position": self.position
         }
 
     @classmethod
@@ -113,8 +130,10 @@ class StudentData:
             edu_id=data.get("edu_id"),
             date_of_birth=data.get("date_of_birth"),
             gender=data.get("gender"),
+            ethnicity=data.get("ethnicity"),
             nationality=data.get("nationality"),
             status=data.get("status"),
             phone=data.get("phone"),
-            address=data.get("address"),
+            specialization=data.get("specialization"),
+            position=data.get("position")
         )
