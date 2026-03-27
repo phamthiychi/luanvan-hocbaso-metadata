@@ -35,7 +35,10 @@ class AssessmentStudentExtractor:
             self._log_missing_competency(f"{comp} chưa được phân loại vào category")
             return "Chưa phân loại"
 
-    def analyze(self, student_code: str, full_comment: str, threshold=0.35) -> StudentReport:
+    def analyze(self, student_code: str,
+                student_name: str,  student_car_id: str,  student_edu_id: str,
+                full_comment: str,
+                threshold=0.35) -> StudentReport:
         sentences = [s.strip() for s in full_comment.split('.') if len(s.strip()) > 5]
         results = []
         for sentence in sentences:
@@ -63,4 +66,8 @@ class AssessmentStudentExtractor:
                     self._log_missing_competency(
                         f"  Low Match - Competency: {name:20} | Score: {score_val:.4f}"
                     )
-        return StudentReport(student_code=student_code, assessments=results)
+        return StudentReport(code=student_code,
+                             name=student_name,
+                             card_id=student_car_id,
+                             edu_id=student_edu_id,
+                             assessments=results)

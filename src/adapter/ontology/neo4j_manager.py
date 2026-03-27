@@ -34,53 +34,61 @@ class Neo4jStudentAssessmentStore:
     @classmethod
     def _process_all_reports(cls, tx, reports_list):
         for report in reports_list:
-            student_code = report.get('student_code')
-            assessments = report.get('assessments', [])
-            cls._ensure_nodes_exist(tx, student_code, assessments)
-            cls._create_student_assessments(tx, student_code, assessments)
+            cls._ensure_nodes_exist(tx, report)
+            cls._create_student_assessments(tx, report)
 
     @classmethod
-    def _ensure_nodes_exist(cls, tx, student_code, assessments, thing_name="Thing"):
+    def _ensure_nodes_exist(cls, tx, report, thing_name="Thing"):
+        assessments = report.get('assessments', [])
         for ass in assessments:
             tx.run("""
-                MERGE (t:Thing {name: $thing_name})
-                MERGE (cat:Category {name: $cat_name})
-                MERGE (com:Competency {name: $comp_name})
-                MERGE (lvl:Level {name: $level_name})
+                MERGE (t:Thing {thing_name: $thing_name})
+                MERGE (cat:Category {category_name: $cat_name})
+                MERGE (com:Competency {competency_name: $comp_name})
                 MERGE (stu:Student {student_id: $student_id})
+                MERGE (stu_name:StudentName {student_name: $student_name})
+                MERGE (stu_card:StudentCardId {student_edu_id: $student_edu_id})
+                MERGE (stu_edu:StudentEduId {student_card_id: $student_card_id})
 
                 MERGE (t)-[:HAS_CATEGORY]->(cat)
                 MERGE (cat)-[:HAS_COMPETENCY]->(com)
-                MERGE (com)-[:HAS_LEVEL]->(lvl)
-                MERGE (lvl)-[:HAS_STUDENT]->(stu)
+                MERGE (com)-[:HAS_STUDENT]->(stu)
+                MERGE (stu)-[:HAS_NAME]->(stu_name)
+                MERGE (stu)-[:HAS_CARD_ID]->(stu_card)
+                MERGE (stu)-[:HAS_EDU_ID]->(stu_edu)
             """,
             thing_name=thing_name,
             cat_name=ass.get("category"),
             comp_name=ass.get("competency"),
-            level_name=ass.get("level"),
-            student_id=student_code)
+            student_id=report.get("code"),
+            student_name=report.get("name"),
+            student_edu_id=report.get("edu_id"),
+            student_card_id=report.get("card_id"))
 
     @classmethod
-    def _create_student_assessments(cls, tx, student_code, assessments, thing_name="Thing"):
+    def _create_student_assessments(cls, tx, report, thing_name="Thing"):
+        assessments = report.get('assessments', [])
         for ass in assessments:
             tx.run("""
-                MATCH (t:Thing {name: $thing_name})
-                MATCH (cat:Category {name: $cat_name})
-                MATCH (com:Competency {name: $comp_name})
-                MATCH (lvl:Level {name: $level_name})
+                MATCH (t:Thing {thing_name: $thing_name})
+                MATCH (cat:Category {category_name: $cat_name})
+                MATCH (com:Competency {competency_name: $comp_name})
                 MATCH (stu:Student {student_id: $student_id})
+                MATCH (stu_name:StudentName {student_name: $student_name})
+                MATCH (stu_card:StudentCardId {student_edu_id: $student_edu_id})
+                MATCH (stu_edu:StudentEduId {student_card_id: $student_id})
 
                 MERGE (t)-[:HAS_CATEGORY]->(cat)
                 MERGE (cat)-[:HAS_COMPETENCY]->(com)
-                MERGE (com)-[:HAS_LEVEL]->(lvl)
-                MERGE (lvl)-[r:HAS_STUDENT]->(stu)
-
-                SET r.evidence = $evidence,
-                    r.created_at = date()
+                MERGE (com)-[:HAS_STUDENT]->(stu)
+                MERGE (stu)-[:HAS_NAME]->(stu_name)
+                MERGE (stu)-[:HAS_CARD_ID]->(stu_card)
+                MERGE (stu)-[:HAS_EDU_ID]->(stu_edu)
             """,
             thing_name=thing_name,
             cat_name=ass.get("category"),
             comp_name=ass.get("competency"),
-            level_name=ass.get("level"),
-            student_id=student_code,
-            evidence=ass.get("evidence"))
+            student_id=report.get("code"),
+            student_name=report.get("name"),
+            student_edu_id=report.get("edu_id"),
+            student_card_id=report.get("card_id"))

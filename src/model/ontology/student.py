@@ -11,7 +11,10 @@ class StudentAssessment(BaseModel):
         return self.model_dump()
 
 class StudentReport(BaseModel):
-    student_code: str
+    code: str
+    name: str
+    card_id: str
+    edu_id: str
     assessments: List[StudentAssessment]
 
     def to_dict(self):
