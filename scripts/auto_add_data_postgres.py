@@ -114,8 +114,8 @@ def preprocessing(file_xls, additional_info, profile_type) -> list:
         data = get_data_base_on_profile_type(row, additional_info, profile_type)
         if data:
             result.append(data)
-        if len(result) > 1:
-            return result
+        # if len(result) > 1:
+    return result
 
 async def create_and_update_teacher(teacher_code, info) -> None:
     teacher_repo = {

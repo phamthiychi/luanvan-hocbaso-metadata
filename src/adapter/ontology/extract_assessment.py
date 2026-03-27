@@ -16,7 +16,7 @@ class AssessmentStudentExtractor:
 
     def _log_missing_competency(self, message):
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        with open(self.log_file, "a", encoding="utf-8") as f:
+        with open(self.log_file, "w", encoding="utf-8") as f:
             f.write(f"[{timestamp}] Cảnh báo: {message} \n")
 
     def _get_level(self, sentence: str) -> str:

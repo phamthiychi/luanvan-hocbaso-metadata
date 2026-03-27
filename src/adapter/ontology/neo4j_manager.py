@@ -40,29 +40,47 @@ class Neo4jStudentAssessmentStore:
             cls._create_student_assessments(tx, student_code, assessments)
 
     @classmethod
-    def _ensure_nodes_exist(cls, tx, student_code, assessments):
-        tx.run("MERGE (s:Student {name: $name})", name=student_code)
+    def _ensure_nodes_exist(cls, tx, student_code, assessments, thing_name="Thing"):
         for ass in assessments:
             tx.run("""
+                MERGE (t:Thing {name: $thing_name})
                 MERGE (cat:Category {name: $cat_name})
                 MERGE (com:Competency {name: $comp_name})
-                MERGE (com)-[:BELONGS_TO]->(cat)
+                MERGE (lvl:Level {name: $level_name})
+                MERGE (stu:Student {student_id: $student_id})
+
+                MERGE (t)-[:HAS_CATEGORY]->(cat)
+                MERGE (cat)-[:HAS_COMPETENCY]->(com)
+                MERGE (com)-[:HAS_LEVEL]->(lvl)
+                MERGE (lvl)-[:HAS_STUDENT]->(stu)
             """,
-            cat_name=ass.get('category'),
-            comp_name=ass.get('competency'))
+            thing_name=thing_name,
+            cat_name=ass.get("category"),
+            comp_name=ass.get("competency"),
+            level_name=ass.get("level"),
+            student_id=student_code)
 
     @classmethod
-    def _create_student_assessments(cls, tx, student_code, assessments):
-        cypher = """
-            MATCH (stu:Student {name: $student_name})
-            MATCH (com:Competency {name: $comp_name})
-            MERGE (stu)-[r:HAS_ASSESSMENT {date: date()}]->(com)
-            SET r.level = $level,
-                r.evidence = $evidence
-        """
+    def _create_student_assessments(cls, tx, student_code, assessments, thing_name="Thing"):
         for ass in assessments:
-            tx.run(cypher,
-                student_name=student_code,
-                comp_name=ass.get('competency'),
-                level=ass.get('level'),
-                evidence=ass.get('evidence'))
+            tx.run("""
+                MATCH (t:Thing {name: $thing_name})
+                MATCH (cat:Category {name: $cat_name})
+                MATCH (com:Competency {name: $comp_name})
+                MATCH (lvl:Level {name: $level_name})
+                MATCH (stu:Student {student_id: $student_id})
+
+                MERGE (t)-[:HAS_CATEGORY]->(cat)
+                MERGE (cat)-[:HAS_COMPETENCY]->(com)
+                MERGE (com)-[:HAS_LEVEL]->(lvl)
+                MERGE (lvl)-[r:HAS_STUDENT]->(stu)
+
+                SET r.evidence = $evidence,
+                    r.created_at = date()
+            """,
+            thing_name=thing_name,
+            cat_name=ass.get("category"),
+            comp_name=ass.get("competency"),
+            level_name=ass.get("level"),
+            student_id=student_code,
+            evidence=ass.get("evidence"))

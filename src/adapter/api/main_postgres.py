@@ -5,6 +5,20 @@ from sqlalchemy import text
 from src.adapter.database.postges_manager import postgres_manager
 from src.application.core import SystemCore
 
+from src.adapter.database.postges_manager import postgres_manager
+from src.adapter.database.postgres_repository import (
+    PostgresAcademicYearRepository,
+    PostgresClassRoomRepository,
+    PostgresGradeLevelRepository,
+    PostgresScoreRepository,
+    PostgresSemesterRepository,
+    PostgresStudentRepository,
+    PostgresSubjectRepository,
+    PostgresTeacherRepository,
+    PostgresClassEnrollmentRepository,
+    PostgresTeachingAssignmentRepository
+)
+
 from src.adapter.api.routers.student import router as student_router
 from src.adapter.api.routers.teacher import router as teacher_router
 from src.adapter.api.routers.subject import router as subject_router
@@ -22,6 +36,16 @@ app = FastAPI(title="HOCBASO API - POSTGRES")
 async def startup():
     session = postgres_manager.session
     app.state.core = SystemCore(session)
+    app.state.student_repo = PostgresStudentRepository(session)
+    app.state.teacher_repo = PostgresTeacherRepository(session)
+    app.state.subject_repo = PostgresSubjectRepository(session)
+    app.state.semester_repo = PostgresSemesterRepository(session)
+    app.state.score_repo = PostgresScoreRepository(session)
+    app.state.class_room_repo = PostgresClassRoomRepository(session)
+    app.state.grade_level_repo = PostgresGradeLevelRepository(session)
+    app.state.academic_year_repo = PostgresAcademicYearRepository(session)
+    app.state.class_enrollment_repo = PostgresClassEnrollmentRepository(session)
+    app.state.teaching_assignment_repo = PostgresTeachingAssignmentRepository(session)
 
 @app.get("/health")
 async def health():

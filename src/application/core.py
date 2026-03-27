@@ -94,3 +94,7 @@ class SystemCore:
                        f".{grade_level_code[-2:]}" \
                        f".{class_room_code[-3:]}.{(max(indexs) + 1):03}"
         return await self.student_repo.add(student_entity)
+
+    async def find_student(self, code: str) -> dict:
+        return await self.student_repo.get(code)
+
