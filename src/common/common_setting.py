@@ -1,0 +1,11 @@
+import os
+from dotenv import load_dotenv
+import pathlib
+
+load_dotenv()
+
+class Settings:
+    current_file_path = pathlib.Path(__file__).resolve()
+    REPO_ROOT = current_file_path.parent.parent.parent
+
+settings = Settings()

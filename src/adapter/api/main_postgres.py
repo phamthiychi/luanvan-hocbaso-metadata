@@ -3,21 +3,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
 from src.adapter.database.postges_manager import postgres_manager
-from src.adapter.database.postgres_repository import (
-    PostgresAcademicYearRepository,
-    PostgresClassRoomRepository,
-    PostgresGradeLevelRepository,
-    PostgresScoreRepository,
-    PostgresSemesterRepository,
-    PostgresStudentRepository,
-    PostgresSubjectRepository,
-    PostgresTeacherRepository
-)
-from src.adapter.database.postgres_repository_relationship import (
-    PostgresClassEnrollmentRepository,
-    PostgresLearningResultRepository,
-    PostgresTeachingAssignmentRepository
-)
+from src.application.core import SystemCore
 
 from src.adapter.api.routers.student import router as student_router
 from src.adapter.api.routers.teacher import router as teacher_router
@@ -29,24 +15,13 @@ from src.adapter.api.routers.grade_level import router as grade_level_router
 from src.adapter.api.routers.academic_year import router as academic_year_router
 from src.adapter.api.routers.class_enrollment import router as class_enrollment_router
 from src.adapter.api.routers.teaching_assignment import router as teaching_assignment_router
-from src.adapter.api.routers.learning_result import router as learning_result_router
 
 app = FastAPI(title="HOCBASO API - POSTGRES")
 
 @app.on_event("startup")
 async def startup():
     session = postgres_manager.session
-    app.state.student_repo = PostgresStudentRepository(session)
-    app.state.teacher_repo = PostgresTeacherRepository(session)
-    app.state.subject_repo = PostgresSubjectRepository(session)
-    app.state.semester_repo = PostgresSemesterRepository(session)
-    app.state.score_repo = PostgresScoreRepository(session)
-    app.state.class_room_repo = PostgresClassRoomRepository(session)
-    app.state.grade_level_repo = PostgresGradeLevelRepository(session)
-    app.state.academic_year_repo = PostgresAcademicYearRepository(session)
-    app.state.class_enrollment_repo = PostgresClassEnrollmentRepository(session)
-    app.state.teaching_assignment_repo = PostgresTeachingAssignmentRepository(session)
-    app.state.learning_result_repo = PostgresLearningResultRepository(session)
+    app.state.core = SystemCore(session)
 
 @app.get("/health")
 async def health():
@@ -86,4 +61,3 @@ app.include_router(grade_level_router)
 app.include_router(academic_year_router)
 app.include_router(class_enrollment_router)
 app.include_router(teaching_assignment_router)
-app.include_router(learning_result_router)

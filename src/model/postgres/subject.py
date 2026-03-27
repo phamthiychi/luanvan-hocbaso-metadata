@@ -18,5 +18,5 @@ def validate(mapper, connection, target):
         raise ValueError("subject's name cannot be empty")
     if target.total_periods is None:
         raise ValueError("subject's total periods cannot be empty")
-    if target.total_periods <= 0:
-        raise ValueError("subject's total periods be greater than 0")
+    if target.total_periods < 0:
+        raise ValueError("subject's total periods be greater than or equal to 0")

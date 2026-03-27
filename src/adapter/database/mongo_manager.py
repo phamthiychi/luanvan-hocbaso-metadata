@@ -1,7 +1,7 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-from src.common.settings import settings
+from common.connect_setting import settings
 
 class MongoManager:
     def __init__(self):

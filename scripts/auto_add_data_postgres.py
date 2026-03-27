@@ -7,6 +7,9 @@ import asyncio
 import pandas as pd
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from src.application.core import SystemCore
+
+from src.adapter.api.template.student import StudentCreate
 # API
 from src.adapter.database.postges_manager import postgres_manager
 from src.adapter.database.postgres_repository import (
@@ -19,8 +22,10 @@ from src.adapter.database.postgres_repository import (
 )
 from src.model.postgres.class_room import ClassRoom
 from src.model.postgres.student import Student
+from src.common.postgres_model_setting import settings
 
 SESSION = postgres_manager.session
+CORE = SystemCore(SESSION)
 STUDENT_REPO = PostgresStudentRepository(SESSION)
 ACADEMIC_YEAR_REPO = PostgresAcademicYearRepository(SESSION)
 GRADE_LEVEL_REPO = PostgresGradeLevelRepository(SESSION)
@@ -28,29 +33,8 @@ CLASS_ROOM_REPO = PostgresClassRoomRepository(SESSION)
 TEACHER_REPO = PostgresTeacherRepository(SESSION)
 SUBJECT_REPO = PostgresSubjectRepository(SESSION)
 
-WORD2NUM = {
-    "Một": 1,
-    "Hai": 2,
-    "Ba": 3,
-    "Bốn": 4,
-    "Năm": 5
-}
-WORD2SHORTCUT = {
-    "Một": "Mo",
-    "Hai": "Ha",
-    "Ba": "Ba",
-    "Bốn": "Bo",
-    "Năm": "Na"
-}
-SUBJECT2SHORTCUT = {
-    "Tiểu học": "TH",
-    "Âm nhạc": "AN",
-    "Thể dục": "TD",
-    "Tin học": "TiH",
-    "Tiếng Anh": "TA"
-}
-SHORTCUT2WORD = {v: k for k, v in WORD2SHORTCUT.items()}
-NUM2WORD = {v: k for k, v in WORD2NUM.items()}
+def verify(Value):
+    return None if pd.isna(Value) else Value
 
 def extract(pattern, text):
     match = re.search(pattern, text, re.IGNORECASE)
@@ -60,65 +44,78 @@ def create_academic_year_code(academic_year) -> str:
     return f'NH{academic_year.replace(" - ", "")}'
 
 def create_grade_level_code(class_room) -> str:
-    return f"MK{WORD2NUM[class_room.split(' ')[0]]:02}"
+    return f"MK{settings.WORD2NUM[class_room.split(' ')[0]]:02}"
 
 def create_class_code(class_room, grade_level_code) -> str:
     result = class_room.split(" ")
-    return f"{grade_level_code[-3:]}.ML{WORD2SHORTCUT[result[0]]}{result[1]}"
+    return f"{grade_level_code[-3:]}.ML{settings.WORD2SHORTCUT[result[0]]}{result[1]}"
 
 def create_student_code(index, academic_year_code, grade_level_code, class_code) -> str:
     return f"{academic_year_code[2:]}.{grade_level_code[-2:]}.{class_code[-3:]}.{index:03}"
 
 def create_teacher_code(index, subject) -> str:
-    return f'{SUBJECT2SHORTCUT[subject]}.GV{index:02}'
+    return f'{settings.SUBJECT2SHORTCUT[subject]}.GV{index:02}'
 
-def get_data_base_on_profile_type(row, profile_type) -> dict:
+def get_data_base_on_profile_type(row, additional_info, profile_type) -> dict:
     if profile_type == "student":
-        return {
-            "name": row.get("Họ tên"),
-            "date_of_birth": pd.to_datetime(row.get("Ngày sinh"),
+        return StudentCreate(
+            academic_year=additional_info.get("academic_year"),
+            class_name=verify(row.get("Mã lớp")),
+            name=verify(row.get("Họ tên")),
+            date_of_birth=pd.to_datetime(row.get("Ngày sinh"),
                                             errors="coerce") \
-                             .strftime("%Y-%m-%d"),
-            "gender": row.get("Giới tính"),
-            "ethnicity": row.get("Dân tộc"),
-            "nationality": row.get("Quốc tịch"),
-            "card_id": str(row.get("Số CCCD")),
-            "edu_id": str(row.get("Mã định danh Bộ GD&ĐT")),
-            "status": row.get("Trạng thái HS"),
-            "phone": f'0{str(row.get("Số điện thoại liên hệ"))}',
-            "address": row.get("Chỗ ở hiện nay chi tiết"),
-            "class_room": row.get("Mã lớp")
-        }
+                             .strftime("%Y-%m-%d") if verify(row.get("Ngày sinh")) else None,
+            gender=verify(row.get("Giới tính")),
+            ethnicity=verify(row.get("Dân tộc")),
+            nationality=verify(row.get("Quốc tịch")),
+            card_id=None if pd.isna(row.get("Số CCCD")) else str(row.get("Số CCCD")),
+            edu_id=None if pd.isna(row.get("Mã định danh Bộ GD&ĐT")) else str(row.get("Mã định danh Bộ GD&ĐT")),
+            status=verify(row.get("Trạng thái HS")),
+            phone=None if pd.isna(row.get("Số điện thoại liên hệ")) else f'0{str(row.get("Số điện thoại liên hệ"))}',
+            address=verify(row.get("Chỗ ở hiện nay chi tiết")),
+            father_name=verify(row.get("Họ tên cha")),
+            father_job=verify(row.get("Nghề nghiệp cha")),
+            father_card_id=None if pd.isna(row.get("Số CCCD/CMND/DDCN cha")) else str(row.get("Số CCCD/CMND/DDCN cha")).split(".")[0],
+            father_phone=None if pd.isna(row.get("Số điện thoại cha")) else f'0{str(row.get("Số điện thoại cha"))}'.split(".")[0],
+            mother_name=verify(row.get("Họ tên mẹ")),
+            mother_job=verify(row.get("Nghề nghiệp mẹ")),
+            mother_card_id=None if pd.isna(row.get("Số CCCD/CMND/DDCN mẹ")) else str(row.get("Số CCCD/CMND/DDCN mẹ")).split(".")[0],
+            mother_phone=None if pd.isna(row.get("Số điện thoại mẹ")) else f'0{str(row.get("Số điện thoại mẹ"))}'.split(".")[0],
+            guardian_name=verify(row.get("Họ tên người giám hộ")),
+            guardian_job=verify(row.get("Nghề nghiệp người giám hộ")),
+            guardian_card_id=None if pd.isna(row.get("Số CCCD/CMND/DDCN người giám hộ")) else str(row.get("Số CCCD/CMND/DDCN người giám hộ")).split(".")[0],
+            guardian_phone=None if pd.isna(row.get("Số điện thoại người giám hộ")) else f'0{str(row.get("Số điện thoại người giám hộ"))}'.split(".")[0],
+            place_of_birth=verify(row.get("Nơi sinh"))
+        )
     elif profile_type == "teacher":
         if row.get("Vị trí việc làm") != "Giáo viên":
             return None
         return {
-            "name": row.get("Họ tên"),
+            "name": verify(row.get("Họ tên")),
             "date_of_birth": pd.to_datetime(row.get("Ngày sinh"),
                                             errors="coerce") \
-                             .strftime("%Y-%m-%d"),
-            "gender": row.get("Giới tính"),
-            "ethnicity": row.get("Dân tộc"),
+                             .strftime("%Y-%m-%d") if verify(row.get("Ngày sinh")) else None,
+            "gender": verify(row.get("Giới tính")),
+            "ethnicity": verify(row.get("Dân tộc")),
             "nationality": "Việt Nam",
-            "card_id": str(row.get("Số CMTND/TCC")),
-            "edu_id": str(row.get("Mã định danh Bộ GD&ĐT")),
-            "status": row.get("Trạng thái CB"),
-            "phone": f'0{str(row.get("Điện thoại"))}',
-            "specialization": row.get("Chuyên ngành chính"),
-            "position": None if pd.isna(row.get("Nhóm chức vụ")) else row.get("Nhóm chức vụ"),
-            "subject": row.get("Môn dạy")
+            "card_id": None if pd.isna(row.get("Số CMTND/TCC")) else str(row.get("Số CMTND/TCC")),
+            "edu_id": None if pd.isna(row.get("Mã định danh Bộ GD&ĐT")) else str(row.get("Mã định danh Bộ GD&ĐT")),
+            "status": verify(row.get("Trạng thái CB")),
+            "phone": None if pd.isna(row.get("Điện thoại")) else f'0{str(row.get("Điện thoại"))}',
+            "specialization": verify(row.get("Chuyên ngành chính")),
+            "position": verify(row.get("Nhóm chức vụ")),
+            "subject": verify(row.get("Môn dạy"))
         }
 
-def preprocessing(file_xls, profile_type) -> list:
+def preprocessing(file_xls, additional_info, profile_type) -> list:
     df = pd.read_excel(file_xls)
     result = []
     for _, row in df.iterrows():
-        data = get_data_base_on_profile_type(row, profile_type)
+        data = get_data_base_on_profile_type(row, additional_info, profile_type)
         if data:
             result.append(data)
-        # if len(result) > 1:
-            # print(result)
-    return result
+        if len(result) > 1:
+            return result
 
 async def create_and_update_teacher(teacher_code, info) -> None:
     teacher_repo = {
@@ -135,7 +132,6 @@ async def create_and_update_teacher(teacher_code, info) -> None:
         "specialization": info.get("specialization"),
         "position": info.get("position")
     }
-    print(teacher_repo)
     try:
         result = await TEACHER_REPO.add(teacher_repo)
         if result is None:
@@ -162,6 +158,19 @@ async def create_and_update_student(student_code, info) -> None:
         "status": info.get("status"),
         "phone": info.get("phone"),
         "address": info.get("address"),
+        "father_name": info.get("father_name"),
+        "father_job": info.get("father_job"),
+        "father_phone": info.get("father_phone"),
+        "father_card_id": info.get("father_card_id"),
+        "mother_name": info.get("mother_name"),
+        "mother_job": info.get("mother_job"),
+        "mother_phone": info.get("mother_phone"),
+        "mother_card_id": info.get("mother_card_id"),
+        "guardian_name": info.get("guardian_name"),
+        "guardian_job": info.get("guardian_job"),
+        "guardian_phone": info.get("guardian_phone"),
+        "guardian_card_id": info.get("guardian_card_id"),
+        "place_of_birth": info.get("place_of_birth"),
     }
     try:
         result = await STUDENT_REPO.add(student_record)
@@ -208,23 +217,27 @@ async def create_and_update_grade_level(grade_level_codes) -> None:
 
 async def create_and_update_class_room(class_room_codes, special_program) -> None:
     for code in class_room_codes:
+        print(f"ztanloc {code}")
         students = [result.to_dict()
                     for result in SESSION.query(Student) \
                                          .filter(Student.code.like(f"%{code[-3:]}%")).all()]
+        class_name = f'{settings.SHORTCUT2WORD[code.split("ML")[1][:2]]} {code.split("ML")[1][2]}'
         class_room_record = {
             "code": code,
-            "name": f'{SHORTCUT2WORD[code.split("ML")[1][:2]]} {code.split("ML")[1][2]}',
+            "name": class_name,
             "size": len(students),
+            "grade_level_id": create_grade_level_code(class_name),
             "special_program": special_program
         }
         result = await CLASS_ROOM_REPO.add(class_room_record)
+        print(f"ztanloc {result}")
         if result is None:
             await CLASS_ROOM_REPO.update(class_room_record)
 
 async def create_and_update_subject(subjects, total_periods_default = 30) -> None:
     for sub in subjects:
         subject_repo = {
-            "code": f'MH{SUBJECT2SHORTCUT[sub]}',
+            "code": f'MH{settings.SUBJECT2SHORTCUT[sub]}',
             "name": sub,
             "total_periods": total_periods_default
         }
@@ -232,37 +245,14 @@ async def create_and_update_subject(subjects, total_periods_default = 30) -> Non
         if result is None:
             await SUBJECT_REPO.update(subject_repo)
 
-async def import_data_from_student_profile(student_profile,
-                                           requirement_info) -> None:
-    info_from_student_profile = preprocessing(student_profile, "student")
-    index = 1
+async def import_data_from_student_profile(student_profile, additional_info) -> None:
+    info_from_student_profile = preprocessing(student_profile, additional_info, "student")
     student_errors = []
-    class_codes = set()
-    grade_codes = set()
-    academic_codes = set()
     for info in info_from_student_profile:
-        academic_code = create_academic_year_code(f'{requirement_info["academic_year_start"].split("-")[0]} - '\
-                                                  f'{requirement_info["academic_year_end"].split("-")[0]}')
-        grade_code = create_grade_level_code(info.get("class_room"))
-        class_code = create_class_code(info.get("class_room"), grade_code)
-        if class_code not in class_codes:
-            index = 1
-        else:
-            index = index + 1
-        student_code = create_student_code(index,
-                                           academic_code, grade_code, class_code)
-        result = await create_and_update_student(student_code, info)
+        result = await CORE.add_student(info)
         if result is None:
             student_errors.append(info)
-        academic_codes.add(academic_code)
-        grade_codes.add(grade_code)
-        class_codes.add(class_code)
 
-    await create_and_update_class_room(list(class_codes), None)
-    await create_and_update_grade_level(list(grade_codes))
-    await create_and_update_academic_year(list(academic_codes),
-                                          requirement_info.get("academic_year_start"),
-                                          requirement_info.get("academic_year_end"))
     if student_errors:
         with open("student_profile_error_portgres.json", "w", encoding="utf-8") as f:
             json.dump(student_errors, f, indent=4, ensure_ascii=False)

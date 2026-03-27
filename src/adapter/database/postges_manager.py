@@ -3,18 +3,17 @@ from sqlalchemy.orm import sessionmaker
 from src.model.postgres.base import Base
 
 import src.model.postgres.academic_year
-import src.model.postgres.class_enrollment
-import src.model.postgres.class_room
 import src.model.postgres.grade_level
-import src.model.postgres.learning_result
+import src.model.postgres.class_room
 import src.model.postgres.score
 import src.model.postgres.semester
 import src.model.postgres.student
 import src.model.postgres.subject
 import src.model.postgres.teacher
+import src.model.postgres.class_enrollment
 import src.model.postgres.teaching_assignment
 
-from src.common.settings import settings
+from src.common.connect_setting import settings
 class PostgresManager:
     def __init__(self):
         URI = settings.POSTGRES_DB_URI
@@ -26,7 +25,6 @@ class PostgresManager:
             "class_enrollment",
             "class_room",
             "grade_level",
-            "learning_result",
             "score",
             "semester",
             "student",

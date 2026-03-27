@@ -9,7 +9,7 @@ class Settings:
     POSTGRES_DB_PASSWORD = os.getenv("POSTGRES_DB_PASSWORD")
     CHAT_GPT_API_KEY = os.getenv("CHAT_GPT_API_KEY")
     MONGO_DB_URI = f"mongodb+srv://{MONGO_DB_USERNAME}:{MONGO_DB_PASSWORD}@hocbaso-data.wyldsrm.mongodb.net/?appName=HocBaSo-Data"
-    POSTGRES_DB_URI = f"postgresql://postgres.ypitqepyiqihlvwanqfs:{POSTGRES_DB_PASSWORD}@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres"
+    POSTGRES_DB_URI = f"postgresql://postgres.ywwdxymgayokrxyestkw:{POSTGRES_DB_PASSWORD}@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres"
 
     CORE_MONGO_DB = os.getenv("CORE_MONGO_DB")
     # ANALYTICS_DB = os.getenv("ANALYTICS_DB")

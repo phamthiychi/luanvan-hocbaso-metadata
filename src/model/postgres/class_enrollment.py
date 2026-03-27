@@ -6,29 +6,34 @@ from src.model.postgres.base import Base
 
 class ClassEnrollment(Base):
     __tablename__ = "class_enrollment"
-    student_id: Mapped[str] = mapped_column(
+    student_code: Mapped[str] = mapped_column(
         String(20),
         ForeignKey("student.code"),
         primary_key=True
     )
-    grade_level_id: Mapped[str] = mapped_column(
-        String(20),
-        ForeignKey("grade_level.code"),
-        primary_key=True
-    )
-    class_id: Mapped[str] = mapped_column(
+    class_code: Mapped[str] = mapped_column(
         String(20),
         ForeignKey("class_room.code"),
         primary_key=True
     )
-    academic_year_id: Mapped[str] = mapped_column(
+    academic_year_code: Mapped[str] = mapped_column(
         String(20),
         ForeignKey("academic_year.code"),
         primary_key=True
     )
-    semester_id: Mapped[str] = mapped_column(
+    semester_code: Mapped[str] = mapped_column(
         String(20),
         ForeignKey("semester.code"),
+        primary_key=True
+    )
+    score_code: Mapped[str] = mapped_column(
+        String(20),
+        ForeignKey("score.code"),
+        primary_key=True
+    )
+    subject_code: Mapped[str] = mapped_column(
+        String(20),
+        ForeignKey("subject.code"),
         primary_key=True
     )
     enrollment_date: Mapped[date] = mapped_column(Date, nullable=False)
@@ -37,16 +42,18 @@ class ClassEnrollment(Base):
 @event.listens_for(ClassEnrollment, "before_insert")
 @event.listens_for(ClassEnrollment, "before_update")
 def validate(mapper, connection, target):
-    if not target.student_id:
-        raise ValueError("class enrollment's student id cannot be empty")
-    if not target.grade_level_id:
-        raise ValueError("class enrollment's grade level id cannot be empty")
-    if not target.class_id:
-        raise ValueError("class enrollment's class id cannot be empty")
-    if not target.academic_year_id:
-        raise ValueError("class enrollment's academic year id cannot be empty")
-    if not target.semester_id:
-        raise ValueError("class enrollment's semester id cannot be empty")
+    if not target.student_code:
+        raise ValueError("class enrollment's student code cannot be empty")
+    if not target.class_code:
+        raise ValueError("class enrollment's class code cannot be empty")
+    if not target.academic_year_code:
+        raise ValueError("class enrollment's academic year code cannot be empty")
+    if not target.semester_code:
+        raise ValueError("class enrollment's semester code cannot be empty")
+    if not target.score_code:
+        raise ValueError("class enrollment's score code cannot be empty")
+    if not target.subject_code:
+        raise ValueError("class enrollment's subject code cannot be empty")
     if not target.enrollment_date:
         raise ValueError("class enrollment's enrollment date cannot be empty")
     try:

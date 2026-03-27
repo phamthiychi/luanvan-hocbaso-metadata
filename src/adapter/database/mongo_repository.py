@@ -2,14 +2,6 @@ from typing import Generic, Optional, Type, TypeVar
 from fastapi import HTTPException
 
 from src.interface.data import Repository
-from src.model.mongo.student import Student
-from src.model.mongo.teacher import Teacher
-from src.model.mongo.subject import Subject
-from src.model.mongo.semester import Semester
-from src.model.mongo.score import Score
-from src.model.mongo.class_room import ClassRoom
-from src.model.mongo.grade_level import GradeLevel
-from src.model.mongo.academic_year import AcademicYear
 
 T = TypeVar("T")
 
@@ -70,34 +62,3 @@ class MongoRepositoryBase(Repository[T], Generic[T]):
         updated_doc = self.col.find_one({"code": code})
         return self.model_cls.from_dict(updated_doc)
 
-class MongoStudentRepository(MongoRepositoryBase[Student]):
-    collection_name = "students"
-    model_cls = Student
-
-class MongoTeacherRepository(MongoRepositoryBase[Teacher]):
-    collection_name = "teachers"
-    model_cls = Teacher
-
-class MongoSubjectRepository(MongoRepositoryBase[Subject]):
-    collection_name = "subjects"
-    model_cls = Subject
-
-class MongoSemesterRepository(MongoRepositoryBase[Semester]):
-    collection_name = "semesters"
-    model_cls = Semester
-
-class MongoScoreRepository(MongoRepositoryBase[Score]):
-    collection_name = "scores"
-    model_cls = Score
-
-class MongoClassRepository(MongoRepositoryBase[ClassRoom]):
-    collection_name = "classes"
-    model_cls = ClassRoom
-
-class MongoGradeLevelRepository(MongoRepositoryBase[GradeLevel]):
-    collection_name = "grade_levels"
-    model_cls = GradeLevel
-
-class MongoAcademicYearRepository(MongoRepositoryBase[AcademicYear]):
-    collection_name = "academic_years"
-    model_cls = AcademicYear

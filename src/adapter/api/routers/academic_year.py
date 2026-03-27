@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, Request
 
-from src.model.mongo.academic_year import AcademicYear
 from src.adapter.api.template.academic_year import AcademicYearCreate, AcademicYearUpdate
 
 router = APIRouter(prefix="/academic-years", tags=["academic-years"])

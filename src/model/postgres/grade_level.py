@@ -18,5 +18,5 @@ def validate(mapper, connection, target):
         raise ValueError("grade level's name cannot be empty")
     if target.max_students is None:
         raise ValueError("grade level's max students cannot be empty")
-    if target.max_students <= 0:
-        raise ValueError("grade level's max students must be greater than 0")
+    if target.max_students < 0:
+        raise ValueError("grade level's max students must be greater than or equal to 0")
