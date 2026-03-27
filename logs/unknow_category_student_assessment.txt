@@ -1,41 +1,30 @@
-[2026-03-26 00:04:40] Cảnh báo: Không tìm thấy level trong câu Em tiếp thu bài nhanh, làm các bài tập Toán chính xác và trình bày khoa học 
-[2026-03-26 00:04:40] Cảnh báo: Không tìm thấy level trong câu Em tiếp thu bài nhanh, làm các bài tập Toán chính xác và trình bày khoa học 
-[2026-03-26 00:04:40] Cảnh báo: Với câu Em tiếp thu bài nhanh, làm các bài tập Toán chính xác và trình bày khoa học 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Ngôn ngữ             | Score: 0.2128 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giao tiếp            | Score: 0.2515 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giải quyết vấn đề    | Score: 0.2114 
-[2026-03-26 00:04:40] Cảnh báo: Với câu Trong giờ học, em còn nhút nhát, chưa mạnh dạn giơ tay phát biểu ý kiến xây dựng bài 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Toán học             | Score: 0.2755 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Ngôn ngữ             | Score: 0.1446 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giao tiếp            | Score: 0.1109 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giải quyết vấn đề    | Score: 0.1269 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Tự học               | Score: 0.2984 
-[2026-03-26 00:04:40] Cảnh báo: Với câu Em có ý thức tự giác học tập tốt, luôn hoàn thành bài về nhà đúng hạn 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Ngôn ngữ             | Score: 0.1571 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giao tiếp            | Score: 0.2613 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giải quyết vấn đề    | Score: 0.2231 
-[2026-03-26 00:04:40] Cảnh báo: Với câu Cần rèn luyện thêm kỹ năng giao tiếp trước đám đông 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Ngôn ngữ             | Score: 0.2665 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giải quyết vấn đề    | Score: 0.2878 
-[2026-03-26 00:04:40] Cảnh báo: Với câu Học sinh có kiến thức Toán học vững vàng, nắm chắc các phép tính cơ bản và biết vận dụng vào bài tập thực tế, đạt mức hoàn thành tốt 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Ngôn ngữ             | Score: 0.2129 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giao tiếp            | Score: 0.2188 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giải quyết vấn đề    | Score: 0.1876 
-[2026-03-26 00:04:40] Cảnh báo: Với câu Về kỹ năng Ngôn ngữ, em đọc hiểu tốt, diễn đạt ý rõ ràng nhưng đôi khi còn thiếu tự tin khi trình bày trước lớp, đạt mức hoàn thành 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giao tiếp            | Score: 0.2659 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giải quyết vấn đề    | Score: 0.1609 
-[2026-03-26 00:04:40] Cảnh báo: Với câu Em có thái độ học tập nghiêm túc, chăm chỉ, chủ động trong tự học và thường xuyên hoàn thành bài tập đầy đủ, đạt mức hoàn thành tốt 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Ngôn ngữ             | Score: 0.1137 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giao tiếp            | Score: 0.2158 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giải quyết vấn đề    | Score: 0.2237 
-[2026-03-26 00:04:40] Cảnh báo: Với câu Học sinh có kiến thức Ngôn ngữ ở mức cơ bản, hiểu bài nhưng cần rèn luyện thêm để mở rộng vốn từ, đạt mức hoàn thành 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giao tiếp            | Score: 0.3359 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giải quyết vấn đề    | Score: 0.1951 
-[2026-03-26 00:04:40] Cảnh báo: Với câu Về kỹ năng Giao tiếp và Giải quyết vấn đề, em còn lúng túng khi làm việc nhóm và xử lý tình huống mới, cần cố gắng thêm 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Toán học             | Score: 0.3114 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Ngôn ngữ             | Score: 0.1322 
-[2026-03-26 00:04:40] Cảnh báo: Với câu Tuy nhiên, em có thái độ tích cực, biết lắng nghe và cố gắng cải thiện trong học tập cũng như trong hoạt động tự học, đạt mức hoàn thành 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Toán học             | Score: 0.3182 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Ngôn ngữ             | Score: 0.0767 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giao tiếp            | Score: 0.2104 
-[2026-03-26 00:04:40] Cảnh báo: Low Match - Competency: Giải quyết vấn đề    | Score: 0.1612 
+[2026-03-27 21:47:42] Cảnh báo: Không tìm thấy level trong câu Em tiếp thu bài nhanh, làm các bài tập Toán chính xác và trình bày khoa học 
+[2026-03-27 21:47:42] Cảnh báo: Không tìm thấy level trong câu Em tiếp thu bài nhanh, làm các bài tập Toán chính xác và trình bày khoa học 
+[2026-03-27 21:47:42] Cảnh báo: Với câu Em tiếp thu bài nhanh, làm các bài tập Toán chính xác và trình bày khoa học 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Ngôn ngữ             | Score: 0.2128 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Giao tiếp            | Score: 0.2515 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Giải quyết vấn đề    | Score: 0.2114 
+[2026-03-27 21:47:42] Cảnh báo: Với câu Trong giờ học, em còn nhút nhát, chưa mạnh dạn giơ tay phát biểu ý kiến xây dựng bài 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Toán học             | Score: 0.2755 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Ngôn ngữ             | Score: 0.1446 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Giao tiếp            | Score: 0.1109 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Giải quyết vấn đề    | Score: 0.1269 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Tự học               | Score: 0.2984 
+[2026-03-27 21:47:42] Cảnh báo: Với câu Em có ý thức tự giác học tập tốt, luôn hoàn thành bài về nhà đúng hạn 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Ngôn ngữ             | Score: 0.1571 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Giao tiếp            | Score: 0.2613 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Giải quyết vấn đề    | Score: 0.2231 
+[2026-03-27 21:47:42] Cảnh báo: Với câu Cần rèn luyện thêm kỹ năng giao tiếp trước đám đông 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Ngôn ngữ             | Score: 0.2665 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Giải quyết vấn đề    | Score: 0.2878 
+[2026-03-27 21:47:42] Cảnh báo: Với câu Học sinh có kiến thức Ngôn ngữ ở mức cơ bản, hiểu bài nhưng cần rèn luyện thêm để mở rộng vốn từ, đạt mức hoàn thành 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Giao tiếp            | Score: 0.3359 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Giải quyết vấn đề    | Score: 0.1951 
+[2026-03-27 21:47:42] Cảnh báo: Với câu Về kỹ năng Giao tiếp và Giải quyết vấn đề, em còn lúng túng khi làm việc nhóm và xử lý tình huống mới, cần cố gắng thêm 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Toán học             | Score: 0.3114 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Ngôn ngữ             | Score: 0.1322 
+[2026-03-27 21:47:42] Cảnh báo: Với câu Tuy nhiên, em có thái độ tích cực, biết lắng nghe và cố gắng cải thiện trong học tập cũng như trong hoạt động tự học, đạt mức hoàn thành 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Toán học             | Score: 0.3182 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Ngôn ngữ             | Score: 0.0767 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Giao tiếp            | Score: 0.2104 
+[2026-03-27 21:47:42] Cảnh báo:   Low Match - Competency: Giải quyết vấn đề    | Score: 0.1612 
